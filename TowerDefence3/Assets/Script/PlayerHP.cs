@@ -16,7 +16,13 @@ public class PlayerHP : MonoBehaviour
     {
         m_currentHP = m_maxHP;
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Application.Quit();
+        }
+    }
     public void TakeDamage(float p_damage)
     {
         m_currentHP -= p_damage;

@@ -51,8 +51,6 @@ public class EnemySpawner : MonoBehaviour
 
             if (line == null) break;
 
-            Debug.Log(line);
-
             string[] parts = line.Split(',');
 
             Spawn spawn = new Spawn();
@@ -112,8 +110,7 @@ public class EnemySpawner : MonoBehaviour
     }
     void SpawnEnemyHPBar(GameObject p_enemy)
     {
-        GameObject sliderClone = enemyMemoryPool.SpawnHPBar(); //Instantiate(m_enemyHPBarPrefab);
-
+        GameObject sliderClone = enemyMemoryPool.SpawnHPBar(); 
         sliderClone.transform.SetParent(m_canvasTransform);
 
         sliderClone.transform.localScale = Vector3.one;
