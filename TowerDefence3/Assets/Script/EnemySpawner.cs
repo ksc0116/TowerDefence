@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.IO;
 
@@ -39,15 +40,42 @@ public class EnemySpawner : MonoBehaviour
         enemyList=new List<Enemy>();
         spawnList= new List<Spawn>();
     }
+    // Resources폴더에 파일이 있을 때
+    /* void SetSpawnData()
+     {
+         TextAsset textAsset = Resources.Load("Wave" + curWaveIndex) as TextAsset;
+         StringReader stringReader = new StringReader(textAsset.text);
 
+         while (stringReader != null)
+         {
+             string line = stringReader.ReadLine();
+
+             if (line == null) break;
+
+             string[] parts = line.Split(',');
+
+             Spawn spawn = new Spawn();
+             spawn.type = parts[0];
+             spawn.m_spawnTime = float.Parse(parts[1]);
+
+             spawnList.Add(spawn);
+         }
+         stringReader.Close();
+
+         curWaveIndex++;
+     }*/
+    // StreamingAssets폴더에 파일이 있을 때
     void SetSpawnData()
     {
-        TextAsset textAsset = Resources.Load("Wave"+ curWaveIndex) as TextAsset;
-        StringReader stringReader = new StringReader(textAsset.text);
+        //string streamingAssetsDirectory = "jar:file://" + Application.dataPath + "!/assets/";
+        //string filePath = streamingAssetsDirectory + "Wave"+curWaveIndex;
+        string filePath = $"{Application.streamingAssetsPath}/Wave" + curWaveIndex + ".csv";
 
-        while (stringReader != null)
+        StreamReader sr = new StreamReader(filePath);
+
+        while (sr != null)
         {
-            string line = stringReader.ReadLine();
+            string line = sr.ReadLine();
 
             if (line == null) break;
 
@@ -55,12 +83,12 @@ public class EnemySpawner : MonoBehaviour
 
             Spawn spawn = new Spawn();
             spawn.type = parts[0];
-            spawn.m_spawnTime = float.Parse( parts[1] );
+            spawn.m_spawnTime = float.Parse(parts[1]);
 
             spawnList.Add(spawn);
         }
-        stringReader.Close();
-        
+        sr.Close();
+
         curWaveIndex++;
     }
     public void StartWave(Wave p_wave)

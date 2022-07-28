@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using System.IO;
 using TMPro;
 
@@ -18,14 +19,14 @@ public class WaveSystem : MonoBehaviour
     {
         SetWaveInfo();
     }
-
-    void SetWaveInfo()
+    // Resources폴더에 파일이 있을 때
+    /*void SetWaveInfo()
     {
         List<string> waveInfo = new List<string>();
         int waveCount = 0;
         TextAsset textAsset = Resources.Load("WaveInfo") as TextAsset;
         StringReader stringReader = new StringReader(textAsset.text);
-        while(stringReader != null)
+        while (stringReader != null)
         {
             string line = stringReader.ReadLine();
 
@@ -34,12 +35,40 @@ public class WaveSystem : MonoBehaviour
             if (line == null) break;
             waveCount++;
         }
-        m_waves= new Wave[waveCount];
-        for(int i=0;i<waveCount;i++)
+        m_waves = new Wave[waveCount];
+        for (int i = 0; i < waveCount; i++)
         {
-            m_waves[i].enemyCount = int.Parse( waveInfo[i] );
+            m_waves[i].enemyCount = int.Parse(waveInfo[i]);
         }
         stringReader.Close();
+    }*/
+
+    // StreamingAssets폴더에 파일이 있을 때
+    void SetWaveInfo()
+    {
+        List<string> waveInfo = new List<string>();
+        int waveCount = 0;
+
+/*        string streamingAssetsDirectory = "jar:file://" + Application.dataPath + "!/assets/";
+        string filePath = streamingAssetsDirectory + "WaveInfo";*/
+        string filePath = $"{Application.streamingAssetsPath}/WaveInfo.csv";
+
+        StreamReader sr = new StreamReader(filePath);
+        while (sr != null)
+        {
+            string line = sr.ReadLine();
+
+            waveInfo.Add(line);
+
+            if (line == null) break;
+            waveCount++;
+        }
+        m_waves = new Wave[waveCount];
+        for (int i = 0; i < waveCount; i++)
+        {
+            m_waves[i].enemyCount = int.Parse(waveInfo[i]);
+        }
+        sr.Close();
     }
     public void StartWave()
     {
